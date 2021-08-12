@@ -12,27 +12,40 @@ exports.userRegister = async (req, res) => {
         email: req.body.email,
         password: req.body.password
     })
-    user = await user.save()
-    if (!user) {
-        return res.status(400).json({ error: "failed to create an account" })
-    }
-    let token = new Token({
-        token: crypto.randomBytes(16).toString('hex'),
-        userId: user._id
+    User.findOne({email:user.email},async(error,data)=>{
+        if(data==null){
+            user = await user.save()
+            if (!user) {
+                return res.status(400).json({ error: "failed to create an account" })
+            }
+            let token = new Token({
+                token: crypto.randomBytes(16).toString('hex'),
+                userId: user._id
+            })
+            token = await token.save()
+            if (!token) {
+                return res.status(400).json({ error: "something went wrong" })
+            }
+            const url=process.env.FRONTEND_URL+'\/email\/confirmation\/'+token.token
+            sendEmail({
+                from: 'no-reply@express-commerce.com',
+                to: user.email,
+                subject: 'Email Verification Link',
+                text: `Hello, \n\n Please verify your account by click in the below link:\n\n http:\/\/${req.headers.host}\/api\/confirmation\/${token.token}`,
+                html: `<h1>Confirm your email account</h1>
+
+                      <button><a href="${url}">Verify email</a></button>
+                     `
+                // http://localhost:8000/api/confirmation/845894794
+            })
+            res.send(user)
+
+        }
+        else{
+            return res.status(400).json({error:"email must be unique"})
+        }
     })
-    token = await token.save()
-    if (!token) {
-        return res.status(400).json({ error: "something went wrong" })
-    }
-    sendEmail({
-        from: 'no-reply@express-commerce.com',
-        to: user.email,
-        subject: 'Email Verification Link',
-        text: `Hello, \n\n Please verify your account by click in the below link:\n\n http:\/\/${req.headers.host}\/api\/confirmation\/${token.token}`,
-        html: `<h1>Confirm your email account</h1>`
-        // http://localhost:8000/api/confirmation/845894794
-    })
-    res.send(user)
+   
 }
 
 //confirming the email
@@ -82,7 +95,7 @@ exports.signIn = async (req, res) => {
         return res.status(400).json({ error: "verify your email to continue the process" })
     }
     //now generate token with user id and jwt secret
-    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET)
+    const token = jwt.sign({ _id: user._id,user:user.role}, process.env.JWT_SECRET)
     //store token in the cookie
     res.cookie('mycookie', token, { expire: Date.now() + 9999999 })
 
@@ -209,6 +222,5 @@ exports.resendVerificationMail=async(req,res)=>{
     res.json({message:"verification link has been sent"})
 
 }
-
 
 

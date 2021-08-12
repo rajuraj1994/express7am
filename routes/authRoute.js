@@ -2,7 +2,10 @@ const express=require('express')
 const router=express.Router()
 const{userRegister, postEmailConfirmation,signIn,signout,forgetPassword,resetPassword,userList,userDetails,requireSignin,resendVerificationMail}=require('../controller/authController')
 
-router.post('/register',userRegister)
+const{userValidation}=require('../validation')
+
+
+router.post('/register',userValidation,userRegister)
 router.post('/confirmation/:token',postEmailConfirmation)
 router.post('/signin',signIn)
 router.post('/signout',signout)

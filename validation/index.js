@@ -21,3 +21,25 @@ exports.productValidation=(req,res,next)=>{
     next();
 
 }
+
+
+exports.userValidation=(req,res,next)=>{
+    req.check('name',"Name is Required").notEmpty()
+    req.check('email',"email is Required").notEmpty()
+    .isEmail()
+    .withMessage('invalid email')
+    req.check('password',"password is required").notEmpty()
+    .isLength({
+        min:8
+    })
+    .withMessage('password must be more than 8 characters')
+
+
+    const errors=req.validationErrors()
+    if(errors){
+        const showError=errors.map(error=>error.msg)[0]
+        return res.status(400).json({error:showError})
+    }
+    next();
+
+}

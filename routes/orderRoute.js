@@ -2,11 +2,13 @@ const express=require('express')
 const router=express.Router()
 const {postOrder,orderList,orderDetails,updateStatus,deleteOrder,userOrders}=require('../controller/ordercontroller')
 
-router.post('/postorder',postOrder)
-router.get('/orderlist',orderList)
+const{requireSignin}=require('../controller/authController')
+
+router.post('/postorder',requireSignin,postOrder)
+router.get('/orderlist',requireSignin,orderList)
 router.get('/orderdetails/:id',orderDetails)
-router.put('/updatestatus/:id',updateStatus)
-router.delete('/deleteorder/:id',deleteOrder)
-router.get('/userorderlist/:userid',userOrders)
+router.put('/updatestatus/:id',requireSignin,updateStatus)
+router.delete('/deleteorder/:id',requireSignin,deleteOrder)
+router.get('/userorderlist/:userid',requireSignin,userOrders)
 
 module.exports=router
