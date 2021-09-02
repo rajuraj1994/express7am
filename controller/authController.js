@@ -125,13 +125,16 @@ exports.forgetPassword = async (req, res) => {
     if (!token) {
         return res.status(400).json({ error: "something went wrong" })
     }
+    const url=process.env.FRONTEND_URL+'\/reset\/password\/'+token.token
     //send mail
     sendEmail({
         from: 'no-reply@express-commerce.com',
         to: user.email,
         subject: 'Password Reset Link',
         text: `Hello, \n\n Please reset your password by click in the below link:\n\n http:\/\/${req.headers.host}\/api\/resetpassword\/${token.token}`,
-        html: `<h1>Reset your Password</h1>`
+        html: `<h1>Reset your Password</h1>
+        <button><a href="${url}">Reset Password</a></button>
+         `
         // http://localhost:8000/api/resetpassword/845894794
     })
     res.json({ message: "password reset link has been sent to your email account" })

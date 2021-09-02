@@ -31,7 +31,7 @@ exports.showCategoryList = async (req, res) => {
     if (!category) {
         return res.status(400).json({ error: "something went wrong" })
     }
-    res.json({ category })
+    res.json(category)
 }
 
 //to show single category
