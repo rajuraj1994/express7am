@@ -11,6 +11,7 @@ const categoryRoute=require('./routes/categoryRoute')
 const productRoute=require('./routes/productRoute')
 const authRoute=require('./routes/authRoute')
 const orderRoute=require('./routes/orderRoute')
+const paymentRoute=require('./routes/payment')
 
 const app=express()
 
@@ -30,6 +31,7 @@ app.use('/api',categoryRoute)
 app.use('/api',productRoute)
 app.use('/api',authRoute)
 app.use('/api',orderRoute)
+app.use('/api',paymentRoute)
 
 
 const port=process.env.PORT || 8000
