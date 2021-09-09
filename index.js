@@ -11,7 +11,7 @@ const categoryRoute=require('./routes/categoryRoute')
 const productRoute=require('./routes/productRoute')
 const authRoute=require('./routes/authRoute')
 const orderRoute=require('./routes/orderRoute')
-const paymentRoute=require('./routes/payment')
+const paymentRoute=require('./routes/paymentRoute')
 
 const app=express()
 

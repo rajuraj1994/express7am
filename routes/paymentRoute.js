@@ -6,7 +6,7 @@ const{requireSignin}=require('../controller/authController')
 const router=express.Router()
 
 router.post('/payment/process',requireSignin,processPayment)
-router.get('/stripeapi',requireSignin,sendStripeApi)
+router.get('/stripeapi',sendStripeApi)
 
 
 module.exports=router
