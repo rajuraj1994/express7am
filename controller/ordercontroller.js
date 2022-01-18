@@ -29,7 +29,8 @@ exports.postOrder=async(req,res)=>{
         country:req.body.country,
         phone:req.body.phone,
         totalPrice:TotalPrice,
-        user:req.body.user
+        user:req.body.user,
+        paymentInfo:req.body.paymentInfo
     })
     order=await order.save()
     if(!order){

@@ -10,7 +10,7 @@ router.post('/postproduct',requireSignin,upload.single('product_image'),productV
 router.get('/productlist',productList)
 router.get('/productdetails/:id',productDetails)
 router.delete('/deleteproduct/:id',requireSignin,deleteProduct)
-router.put('/updateproduct/:id',requireSignin,updateProduct)
+router.put('/updateproduct/:id',requireSignin,upload.any('product_image'),productValidation,updateProduct)
 router.post('/products/by/search',listBySearch)
 router.get('/product/related/:id',listRelated)
 
